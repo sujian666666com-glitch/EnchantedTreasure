@@ -1,0 +1,61 @@
+#!/bin/bash
+#
+# Git commit-msg hook
+# 验证提交信息是否符合规范格式
+#
+# 规范格式: type(scope): description
+# 示例: feat(private-market): viewer context 解析、市场模式 schema 与统一方案文档
+#
+# 安装方式:
+#   cp scripts/commit-msg .git/hooks/commit-msg
+#   chmod +x .git/hooks/commit-msg
+# 或:
+#   git config core.hooksPath scripts/
+#
+
+# 获取提交信息文件路径
+COMMIT_MSG_FILE=$1
+COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+
+# 如果提交信息以注释开头（如 merge 等），跳过验证
+if [[ "$COMMIT_MSG" =~ ^# ]]; then
+    exit 0
+fi
+
+# 定义允许的类型
+ALLOWED_TYPES="feat|fix|docs|style|refactor|test|chore|add|update|remove|perf|ci|build|revert"
+
+# 定义正则表达式
+# 格式: type(scope): description 或 type: description
+REGEX="^(${ALLOWED_TYPES})(\([^)]+\))?: .+"
+
+# 验证提交信息格式
+if ! [[ "$COMMIT_MSG" =~ $REGEX ]]; then
+    echo ""
+    echo "❌ 提交信息格式不符合规范！"
+    echo ""
+    echo "规范格式: type(scope): description"
+    echo "示例: feat(private-market): viewer context 解析、市场模式 schema 与统一方案文档"
+    echo ""
+    echo "允许的类型:"
+    echo "  feat     - 新功能"
+    echo "  fix      - 修复 bug"
+    echo "  docs     - 文档变更"
+    echo "  style    - 代码格式调整"
+    echo "  refactor - 重构代码"
+    echo "  test     - 测试相关"
+    echo "  chore    - 构建/工具变动"
+    echo "  add      - 新增资源"
+    echo "  update   - 更新资源"
+    echo "  remove   - 删除资源"
+    echo "  perf     - 性能优化"
+    echo "  ci       - CI/CD 配置"
+    echo "  build    - 构建系统"
+    echo "  revert   - 回滚提交"
+    echo ""
+    echo "当前提交信息: $COMMIT_MSG"
+    echo ""
+    exit 1
+fi
+
+exit 0

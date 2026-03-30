@@ -20,9 +20,11 @@ EnchantedTreasure/
 ├── snippets/       # 代码片段、脚本、配置模板
 ├── knowledge/      # 技术分享、经验总结、FAQ
 ├── templates/      # 通用模板、Checklist、流程文档
+├── scripts/        # Git hooks 等脚本
 ├── Jian/           # Jian 个人资源目录
 ├── README.md       # 仓库说明
-└── AGENTS.md       # 本文件
+├── AGENTS.md       # AI Agent 协作指南
+└── .gitignore      # Git 忽略规则
 ```
 
 ## Agent 行为准则
@@ -35,13 +37,49 @@ EnchantedTreasure/
 
 ### 提交规范
 
-使用规范化的提交信息格式：
+**强制格式**: `type(scope): description`
 
-- `Add: 新增资源` - 添加新文件
-- `Update: 更新资源` - 更新现有文件
-- `Fix: 修正错误` - 修复问题
-- `Remove: 删除资源` - 删除文件
-- `Refactor: 重构整理` - 重组目录或文件
+**示例**: `feat(private-market): viewer context 解析、市场模式 schema 与统一方案文档`
+
+#### 允许的类型
+
+| 类型 | 说明 |
+|------|------|
+| `feat` | 新功能 |
+| `fix` | 修复 bug |
+| `docs` | 文档变更 |
+| `style` | 代码格式调整 |
+| `refactor` | 重构代码 |
+| `test` | 测试相关 |
+| `chore` | 构建/工具变动 |
+| `add` | 新增资源 |
+| `update` | 更新资源 |
+| `remove` | 删除资源 |
+| `perf` | 性能优化 |
+| `ci` | CI/CD 配置 |
+| `build` | 构建系统 |
+| `revert` | 回滚提交 |
+
+#### 格式说明
+
+- `type`: 必填，提交类型
+- `scope`: 可选，影响范围/模块名称
+- `description`: 必填，简短描述
+
+#### Git Hook 验证
+
+仓库已配置 `commit-msg` hook，不符合规范的提交将被拒绝。
+
+安装 hook（克隆仓库后执行）：
+
+```bash
+# 方式一：复制 hook 文件
+cp scripts/commit-msg .git/hooks/commit-msg
+chmod +x .git/hooks/commit-msg
+
+# 方式二：配置 Git hooks 路径
+git config core.hooksPath scripts/
+```
 
 ### 注意事项
 
